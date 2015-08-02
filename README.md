@@ -12,3 +12,7 @@ My Windows 10 Tweak AHK Script
 ## Note
 
 The taskbar must be set on the top of the screen, or the first feature will be disabled.
+
+## Downloads
+
+Download the pre-compiled version [here](https://github.com/deluxghost/MyWindows10Tweak/releases).
