@@ -15,7 +15,7 @@ My Windows 10 Tweak AHK Script
 
 ## Note
 
-The taskbar must be set on the top of the screen, or the first feature will be disabled.
+The taskbar must be set on the top (or left) of the screen, or the first feature will be disabled.
 
 ## Settings
 
