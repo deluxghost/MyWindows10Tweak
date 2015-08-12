@@ -25,7 +25,9 @@ If (x == 0 and y == 0 and sm_flag == 0 and StartMenu_t == 1)
 {
     MouseGetPos, , , win_id
     WinGetClass, win_class, ahk_id %win_id%
-    If (win_class == "Shell_TrayWnd" or win_class == "Windows.UI.Core.CoreWindow")
+    MouseState := GetKeyState("LButton") + GetKeyState("RButton") + GetKeyState("MButton")
+    PosDist := oldx1 ** 2 + oldy1 ** 2 + oldx2 ** 2 + oldy2 ** 2
+    If ((win_class == "Shell_TrayWnd" or win_class == "Windows.UI.Core.CoreWindow") and MouseState == 0 and PosDist > 72000)
     {
         sm_flag := 1
         Send, {LWin}
@@ -40,6 +42,10 @@ If (x != 0 or y != 0)
 {
     sm_flag := 0
 }
+oldx2 := oldx1
+oldy2 := oldy1
+oldx1 := x
+oldy1 := y
 Return
 
 KillQQAd: 
