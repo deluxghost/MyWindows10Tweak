@@ -5,6 +5,8 @@ CoordMode, Mouse, Screen
 IniRead, StartMenu_t, %A_WorkingDir%\settings.ini, Function, StartMenu, 0
 IniRead, Screenshot_t, %A_WorkingDir%\settings.ini, Function, Screenshot, 0
 IniRead, ToggleHidden_t, %A_WorkingDir%\settings.ini, Function, ToggleHidden, 0
+IniRead, MoveWindow_t, %A_WorkingDir%\settings.ini, Function, MoveWindow, 0
+IniRead, BingSoftKeyboard_t, %A_WorkingDir%\settings.ini, Function, BingSoftKeyboard, 0
 IniRead, MapCapsLock_t, %A_WorkingDir%\settings.ini, Function, MapCapsLock, 0
 IniRead, KillQQAd_t, %A_WorkingDir%\settings.ini, Function, KillQQAd, 0
 IniRead, QQAdIni, %A_WorkingDir%\settings.ini, QQAd, Classes, %A_Space%
@@ -16,7 +18,7 @@ for index, element in QQAdClasses
 }
 
 SetTimer, StartMenu, 100
-SetTimer, KillQQAd, 1000
+SetTimer, KillQQAd, 500
 Return
 
 StartMenu:
@@ -88,6 +90,20 @@ If WinActive("ahk_class CabinetWClass")
     Sleep, 10
     Send, vhh
 }
+Return
+#If
+
+#If (MoveWindow_t == 1)
+#m::
+Send, !{Space}m
+Sleep, 5
+Send {Left}{Right}
+Return
+#If
+
+#If (BingSoftKeyboard_t == 1)
+#z::
+Send, ^+mk
 Return
 #If
 
