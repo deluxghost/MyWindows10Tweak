@@ -7,7 +7,7 @@ My Windows 10 Tweak AHK Script
 ## Features
 
 * Toggle Start Menu when the mouse move to the upper-left corner of the screen
-* Ctrl-Alt-q shortkey to take a screenshot
+* Ctrl-Alt-q shortcut to take a screenshot
 * Ctrl-h to toggle hidden files in Explorer
 * Win-m to move current window (overwrite the original shortcut)
 * Win-z to open the soft keyboard menu of Bing Input Method
