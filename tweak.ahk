@@ -7,6 +7,7 @@ IniRead, Screenshot_t, %A_WorkingDir%\settings.ini, Function, Screenshot, 0
 IniRead, ToggleHidden_t, %A_WorkingDir%\settings.ini, Function, ToggleHidden, 0
 IniRead, MoveWindow_t, %A_WorkingDir%\settings.ini, Function, MoveWindow, 0
 IniRead, BingSoftKeyboard_t, %A_WorkingDir%\settings.ini, Function, BingSoftKeyboard, 0
+IniRead, QuickShell_t, %A_WorkingDir%\settings.ini, Function, QuickShell, 0
 IniRead, MapCapsLock_t, %A_WorkingDir%\settings.ini, Function, MapCapsLock, 0
 IniRead, KillQQAd_t, %A_WorkingDir%\settings.ini, Function, KillQQAd, 0
 IniRead, QQAdIni, %A_WorkingDir%\settings.ini, QQAd, Classes, %A_Space%
@@ -104,6 +105,12 @@ Return
 #If (BingSoftKeyboard_t == 1)
 #z::
 Send, ^+mk
+Return
+#If
+
+#If (QuickShell_t == 1)
+!F2::
+Run *RunAs "powershell"
 Return
 #If
 
