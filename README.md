@@ -11,6 +11,7 @@ My Windows 10 Tweak AHK Script
 * Ctrl-h to toggle hidden files in Explorer
 * Win-m to move current window (overwrite the original shortcut)
 * Win-z to open the soft keyboard menu of Bing Input Method
+* Alt-F2 to open a Powershell as the Administrator
 * Map CapsLock to Ctrl key, Shift-CapsLock instead
 * Auto kill Tencent QQ popups by customize keyword
 * You can switch all functions
