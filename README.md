@@ -14,6 +14,7 @@ My Windows 10 Tweak AHK Script
 * Alt-F2 to open a Powershell as the Administrator
 * Map CapsLock to Ctrl key, Shift-CapsLock instead
 * Auto kill Tencent QQ popups by customize keyword
+* Auto clean up tray icons of dead process
 * You can switch all functions
 
 ## Note
