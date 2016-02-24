@@ -11,6 +11,7 @@ IniRead, BingSoftKeyboard_t, %A_WorkingDir%\settings.ini, Function, BingSoftKeyb
 IniRead, QuickShell_t, %A_WorkingDir%\settings.ini, Function, QuickShell, 0
 IniRead, MapCapsLock_t, %A_WorkingDir%\settings.ini, Function, MapCapsLock, 0
 IniRead, KillQQAd_t, %A_WorkingDir%\settings.ini, Function, KillQQAd, 0
+IniRead, TotalCmdHack_t, %A_WorkingDir%\settings.ini, Function, TotalCmdHack, 0
 IniRead, QQAdIni, %A_WorkingDir%\settings.ini, QQAd, Classes, %A_Space%
 
 QQAdClasses := StrSplit(QQAdIni, ",")
@@ -20,7 +21,8 @@ for index, element in QQAdClasses
 }
 
 SetTimer, StartMenu, 100
-SetTimer, CleanTray, 4500
+SetTimer, CleanTray, 4000
+SetTimer, TotalCmdWatch, 200
 SetTimer, KillQQAd, 500
 Return
 
@@ -60,6 +62,22 @@ If (CleanUpDeadIcon_t == 1)
 }
 Return
 
+TotalCmdWatch:
+If (TotalCmdHack_t == 1)
+{
+    If WinActive("ahk_class TNASTYNAGSCREEN")
+    {
+        WinGetText, tcmd_content, ahk_class TNASTYNAGSCREEN
+        StringMid, tcmd_num, tcmd_content, 0, 1
+        If (GetKeyState("Alt","P") == 0)
+        {
+            Sleep, 400
+            ControlSend,, %tcmd_num%, ahk_class TNASTYNAGSCREEN
+        }
+    }
+}
+Return
+
 KillQQAd:
 If (KillQQAd_t == 1)
 {
@@ -73,12 +91,21 @@ If !WinExist("ahk_class Microsoft-Windows-Tablet-SnipperToolbar")
 {
     Run, C:\Windows\sysnative\SnippingTool.exe
     Sleep, 500
+    Loop
+    {
+        If WinActive("ahk_class Microsoft-Windows-Tablet-SnipperToolbar")
+        {
+            Break
+        }
+        WinActivate, ahk_class Microsoft-Windows-Tablet-SnipperToolbar
+        Sleep, 50
+    }
 }
 Else
 {
     WinActivate, ahk_class Microsoft-Windows-Tablet-SnipperToolbar
+    Sleep, 50
 }
-Sleep, 50
 Send, ^n
 Return
 
