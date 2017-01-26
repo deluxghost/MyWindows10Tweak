@@ -6,15 +6,14 @@ My Windows 10 Tweak AHK Script
 
 ## Features
 
-* Toggle Start Menu when the mouse move to the upper-left corner of the screen
-* Ctrl-Alt-q shortcut to take a screenshot
+* Toggle Start Menu when your cursor hit the upper-left corner (gnome-shell style)
+* Ctrl-Alt-q shortcut to take a screenshot (use the system screenshot tool)
 * Ctrl-h to toggle hidden files in Explorer
-* Win-m to move current window (overwrite the original shortcut)
-* Win-z to open the soft keyboard menu of Bing Input Method
+* Win-m to move current window (overwrite the original shortcut, consider Win-d instead)
+* Win-z to minimize the active window
 * Alt-F2 to open a Powershell as the Administrator
 * Map CapsLock to Ctrl key, Shift-CapsLock instead
-* Auto kill Tencent QQ popups by customize keyword
-* Auto clean up tray icons of dead process
+* Auto clean up the tray icons of dead process
 * You can switch all functions
 
 ## Note

@@ -7,23 +7,14 @@ IniRead, Screenshot_t, %A_WorkingDir%\settings.ini, Function, Screenshot, 0
 IniRead, ToggleHidden_t, %A_WorkingDir%\settings.ini, Function, ToggleHidden, 0
 IniRead, MoveWindow_t, %A_WorkingDir%\settings.ini, Function, MoveWindow, 0
 IniRead, CleanUpDeadIcon_t, %A_WorkingDir%\settings.ini, Function, CleanUpDeadIcon, 0
-IniRead, BingSoftKeyboard_t, %A_WorkingDir%\settings.ini, Function, BingSoftKeyboard, 0
 IniRead, QuickShell_t, %A_WorkingDir%\settings.ini, Function, QuickShell, 0
 IniRead, MapCapsLock_t, %A_WorkingDir%\settings.ini, Function, MapCapsLock, 0
-IniRead, KillQQAd_t, %A_WorkingDir%\settings.ini, Function, KillQQAd, 0
 IniRead, TotalCmdHack_t, %A_WorkingDir%\settings.ini, Function, TotalCmdHack, 0
-IniRead, QQAdIni, %A_WorkingDir%\settings.ini, QQAd, Classes, %A_Space%
-
-QQAdClasses := StrSplit(QQAdIni, ",")
-for index, element in QQAdClasses
-{
-    GroupAdd, adQQ, %element% ahk_class TXGuiFoundation
-}
+IniRead, Minimiz_t, %A_WorkingDir%\settings.ini, Function, Minimiz, 0
 
 SetTimer, StartMenu, 100
 SetTimer, CleanTray, 4000
 SetTimer, TotalCmdWatch, 200
-SetTimer, KillQQAd, 500
 Return
 
 StartMenu:
@@ -75,13 +66,6 @@ If (TotalCmdHack_t == 1)
             ControlSend,, %tcmd_num%, ahk_class TNASTYNAGSCREEN
         }
     }
-}
-Return
-
-KillQQAd:
-If (KillQQAd_t == 1)
-{
-    WinClose, ahk_group adQQ
 }
 Return
 
@@ -138,12 +122,6 @@ Send {Left}{Right}
 Return
 #If
 
-#If (BingSoftKeyboard_t == 1)
-#z::
-Send, ^+mk
-Return
-#If
-
 #If (QuickShell_t == 1)
 !F2::
 Run *RunAs "powershell"
@@ -162,6 +140,13 @@ Return
     }
     Return
     Capslock::Ctrl
+#If
+
+#If (Minimiz_t == 1)
+#z::
+WinGet, active_id, ID, A
+WinMinimize, ahk_id %active_id%
+Return
 #If
 
 tray_icons()
