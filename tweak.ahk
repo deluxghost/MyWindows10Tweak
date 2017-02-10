@@ -1,4 +1,4 @@
-#Persistent
+﻿#Persistent
 #SingleInstance force
 SetWorkingDir %A_ScriptDir%
 #Include %A_ScriptDir%\lib\Gdip.ahk
@@ -29,6 +29,7 @@ t_TotalCmdHack := GetConf(t_Settings, "Monitor", "TotalCmdHack")
 t_NoExtWarning := GetConf(t_Settings, "Monitor", "NoExtWarning")
 t_SaveAsEnable := GetConf(t_Settings, "SaveAsFile", "Enable")
 t_LiveEnable := GetConf(t_Settings, "LiveWindow", "Enable")
+t_TrashInPC := GetConf(t_Settings, "Windows", "TrashInPC")
 _locale_ := GetConf(t_Settings, "Locale", "Locale")
 
 rel_pos_x = 0, rel_pos_y = 0
@@ -50,6 +51,8 @@ Menu, Tray, Add, % _("tray.reload"), Menu_Reload
 Menu, Tray, Add
 Menu, Tray, Add, % _("tray.exit"), Menu_Exit
 Menu, Tray, NoStandard
+
+TrashInPC(t_TrashInPC)
 
 WinGet, systray, ID, ahk_class Shell_TrayWnd
 SetTimer, GnomeStyleStart, 100
@@ -83,6 +86,8 @@ NewSetting(file)
     Enable=1
     [LiveWindow]
     Enable=1
+    [Windows]
+    TrashInPC=0
     ), % file
 }
 
@@ -90,7 +95,6 @@ AppExit:
 GoSub, LiveClean
 ExitApp
 return
-
 
 Menu_Show:
 Menu, Tray, Show
@@ -113,10 +117,11 @@ Gui, Settings:Add, CheckBox, Checked%t_CleanTrayIcon% v_c9 x12 y219 w350 h20, % 
 Gui, Settings:Add, CheckBox, Checked%t_NoExtWarning% v_c10 x12 y239 w350 h20, % _("gui.settings.noextwarning")
 Gui, Settings:Add, CheckBox, Checked%t_SaveAsEnable% v_c11 x12 y259 w350 h20, % _("gui.settings.saveasfile")
 Gui, Settings:Add, CheckBox, Checked%t_LiveEnable% v_c12 x12 y279 w350 h20, % _("gui.settings.livewindow")
-Gui, Settings:Add, Text, x12 y312 w350 h20, % _("gui.settings.warning")
-Gui, Settings:Add, Button, gBtnSave Default x12 y343 w170 h30, % _("gui.settings.save")
-Gui, Settings:Add, Button, gBtnCancel x192 y343 w170 h30, % _("gui.settings.cancel")
-Gui, Settings:Show, h385 w375, % _("gui.settings")
+Gui, Settings:Add, CheckBox, Checked%t_TrashInPC% v_c13 x12 y299 w350 h20, % _("gui.settings.trashinpc")
+Gui, Settings:Add, Text, x12 y332 w350 h20, % _("gui.settings.warning")
+Gui, Settings:Add, Button, gBtnSave Default x12 y363 w170 h30, % _("gui.settings.save")
+Gui, Settings:Add, Button, gBtnCancel x192 y363 w170 h30, % _("gui.settings.cancel")
+Gui, Settings:Show, h405 w375, % _("gui.settings")
 return
 
 Menu_Reload:
@@ -146,6 +151,7 @@ SetConf(t_Settings, "Monitor", "CleanTrayIcon", _c9)
 SetConf(t_Settings, "Monitor", "NoExtWarning", _c10)
 SetConf(t_Settings, "SaveAsFile", "Enable", _c11)
 SetConf(t_Settings, "LiveWindow", "Enable", _c12)
+SetConf(t_Settings, "Windows", "TrashInPC", _c13)
 Reload
 return
 
@@ -162,6 +168,21 @@ MsgToolTip(msg, timeout:=1000)
 {
     ToolTip, % msg
     SetTimer, RemoveToolTip, % timeout
+}
+
+TrashInPC(yes:=0)
+{
+    if (not A_IsAdmin) {
+        MsgBox, % _("need.admin", _("gui.settings.trashinpc"))
+        return
+    }
+    RootKey := "HKEY_LOCAL_MACHINE"
+    SubKey := "Software\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{645FF040-5081-101B-9F08-00AA002F954E}"
+    if (yes) {
+        RegWrite, REG_SZ, % RootKey, % SubKey
+    } else {
+        RegDelete, % RootKey, % SubKey
+    }
 }
 
 ; ## HotKey ##

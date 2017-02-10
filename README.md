@@ -18,8 +18,11 @@ My Windows 10 Tweak AHK Script
 * Auto skip rename ext-name warning
 * Copy text/image, Ctrl-V save as a file
 * Win-`(Backtick key): Live window thumbnails (pause if minimized)
+* Show "Recycle Bin" in "This PC" (\*)
 * GUI, Tray Menu and Settings
 * Localization (edit locale.ini)
+
+(\*): Administrator permission
 
 ## Settings
 
