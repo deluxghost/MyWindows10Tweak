@@ -35,8 +35,13 @@ rel_pos_x = 0, rel_pos_y = 0
 live_count = 0, live_ypos = 0
 
 ; ## Init ##
-
-;Menu, Tray, Icon, %A_ScriptDir%\Tweak.ico
+if !A_IsCompiled
+    try {
+        Menu, Tray, Icon, %A_ScriptDir%\resource\Tweak.ico
+        Menu, Tray, Icon, %A_ScriptDir%\Tweak.ico
+        Menu, Tray, Icon, %A_ScriptDir%\resource\icon.ico
+        Menu, Tray, Icon, %A_ScriptDir%\icon.ico
+    }
 Menu, Tray, Click, 1
 Menu, Tray, Tip, Tweak
 Menu, Tray, Add, Windows 10 Tweak, Menu_Show
@@ -337,13 +342,13 @@ if (t_GnomeStyleStart and x == p_x and y == p_y and menu_stat == 0) {
     WinGetClass, win_class, ahk_id %win_id%
     MouseState := GetKeyState("LButton") + GetKeyState("RButton") + GetKeyState("MButton")
     PosDist := (x1-p_x) ** 2 + (y1-p_y) ** 2 + (x2-p_x) ** 2 + (y2-p_y) ** 2
-    win_list1 := "Shell_TrayWnd"
-    win_list2 := "Windows.UI.Core.CoreWindow"
-    win_list3 := "ImmersiveLauncher"
-    win_list4 := "ImmersiveSwitchList"
-    win_list5 := "DV2ControlHost"
-    win_list6 := "Button"
-    if win_class not in %win_list1%,%win_list2%,%win_list3%,%win_list4%,%win_list5%,%win_list6%
+    gss_list1 := "Shell_TrayWnd"
+    gss_list2 := "Windows.UI.Core.CoreWindow"
+    gss_list3 := "ImmersiveLauncher"
+    gss_list4 := "ImmersiveSwitchList"
+    gss_list5 := "DV2ControlHost"
+    gss_list6 := "Button"
+    if win_class not in %gss_list1%,%gss_list2%,%gss_list3%,%gss_list4%,%gss_list5%,%gss_list6%
         return
     if (MouseState == 0 and PosDist > 72000) {
         menu_stat := 1
@@ -361,8 +366,7 @@ x1 := x, y1 := y
 return
 
 CleanTrayIcon:
-if (t_CleanTrayIcon)
-{
+if (t_CleanTrayIcon) {
     tray_iconCleanup()
 }
 return
@@ -373,101 +377,97 @@ tray_icons()
     array := []
     array[0] := ["sProcess", "toolTip", "nMsg", "uID", "idx", "idn", "Pid", "hwnd", "sClass", "hIcon"]
     Index := 0
-    detectHiddenWindows_old := a_detectHiddenWindows
+    detectHiddenWindows_old := A_DetectHiddenWindows
     DetectHiddenWindows, On
-    for key, sTray in ["NotifyIconOverflowWindow", "Shell_TrayWnd"]
-    {
+    for key, sTray in ["NotifyIconOverflowWindow", "Shell_TrayWnd"] {
         WinGet, taskbar_pid, PID, ahk_class %sTray%
-        hProc := DllCall("OpenProcess", "Uint", 0x38, "int", 0, "Uint", taskbar_pid)
-        pProc := DllCall("VirtualAllocEx", "Uint", hProc, "Uint", 0, "Uint", 32, "Uint", 0x1000, "Uint", 0x4)
+        hProc := DllCall("OpenProcess", "Uint",0x38, "int",0, "Uint",taskbar_pid)
+        pProc := DllCall("VirtualAllocEx", "Uint",hProc, "Uint",0, "Uint",32, "Uint",0x1000, "Uint",0x4)
         idxTB := tray_getTrayBar()
         SendMessage, %TB_BUTTONCOUNT%, 0, 0, ToolbarWindow32%key%, ahk_class %sTray%
-        Loop, %ErrorLevel%
-        {
-            SendMessage, %TB_GETBUTTON%, a_index - 1, pProc, ToolbarWindow32%key%, ahk_class %sTray%
-            varSetCapacity(btn, 32, 0), varSetCapacity(nfo, 32, 0)
-            DllCall("ReadProcessMemory", "Uint", hProc, "Uint", pProc, "Uint", &btn, "Uint", 32, "Uint", 0)
-            iBitmap := numGet(btn, 0)
-            idn := numGet(btn, 4)
-            Statyle := numGet(btn, 8)
-            If dwData := numGet(btn, 12, "Uint")
-            iString := numGet(btn, 16)
-            else dwData := numGet(btn, 16, "int64"), iString := numGet(btn, 24, "int64")
-            DllCall("ReadProcessMemory", "Uint", hProc, "Uint", dwData, "Uint", &nfo, "Uint", 32, "Uint", 0)
-            If numGet(btn, 12, "Uint")
-            {
-                hwnd := numGet(nfo, 0)
-                uID := numGet(nfo, 4)
-                nMsg := numGet(nfo, 8)
-                hIcon := numGet(nfo, 20)
+        Loop, %ErrorLevel% {
+            SendMessage, %TB_GETBUTTON%, A_Index-1, pProc, ToolbarWindow32%key%, ahk_class %sTray%
+            VarSetCapacity(btn, 32, 0), VarSetCapacity(nfo, 32, 0)
+            DllCall("ReadProcessMemory", "Uint",hProc, "Uint",pProc, "Uint",&btn, "Uint",32, "Uint",0)
+            iBitmap := NumGet(btn, 0)
+            idn := NumGet(btn, 4)
+            Statyle := NumGet(btn, 8)
+            if dwData := NumGet(btn, 12, "Uint")
+                iString := NumGet(btn, 16)
+            else
+                dwData := NumGet(btn, 16, "int64"), iString := NumGet(btn, 24, "int64")
+            DllCall("ReadProcessMemory", "Uint",hProc, "Uint",dwData, "Uint",&nfo, "Uint",32, "Uint",0)
+            if NumGet(btn, 12, "Uint") {
+                hwnd := NumGet(nfo, 0)
+                uID := NumGet(nfo, 4)
+                nMsg := NumGet(nfo, 8)
+                hIcon := NumGet(nfo, 20)
+            } else {
+                hwnd := NumGet(nfo, 0, "int64"), uID := NumGet(nfo, 8, "Uint"), nMsg := NumGet(nfo, 12, "Uint")
             }
-            Else hwnd := numGet(nfo, 0, "int64"), uID := numGet(nfo, 8, "Uint"), nMsg := numGet(nfo, 12, "Uint")
             WinGet, pid, PID, ahk_id %hwnd%
             WinGet, sProcess, ProcessName, ahk_id %hwnd%
             WinGetClass, sClass, ahk_id %hwnd%
-            varSetCapacity(sTooltip, 128), varSetCapacity(wTooltip, 128*2)
-            DllCall("ReadProcessMemory", "Uint", hProc, "Uint", iString, "Uint", &wTooltip, "Uint", 128 * 2, "Uint", 0)
-            DllCall("WideCharToMultiByte", "Uint", 0, "Uint", 0, "str", wTooltip, "int", -1, "str", sTooltip, "int", 128, "Uint", 0, "Uint", 0)
-            idx := a_index - 1
-            toolTip := a_isUnicode ? wTooltip : sTooltip
+            VarSetCapacity(sTooltip, 128), VarSetCapacity(wTooltip, 128*2)
+            DllCall("ReadProcessMemory", "Uint",hProc, "Uint",iString, "Uint",&wTooltip, "Uint",128*2, "Uint",0)
+            DllCall("WideCharToMultiByte", "Uint",0, "Uint",0, "str",wTooltip, "int",-1, "str",sTooltip, "int",128, "Uint",0, "Uint",0)
+            idx := A_Index - 1
+            ToolTip := A_IsUnicode ? wTooltip : sTooltip
             Index++
             for a, b in array[0]
-            array[Index, b] := %b%
+                array[Index, b] := %b%
         }
-        DllCall("VirtualFreeEx", "Uint", hProc, "Uint", pProc, "Uint", 0, "Uint", 0x8000)
-        DllCall("CloseHandle", "Uint", hProc)
+        DllCall("VirtualFreeEx", "Uint",hProc, "Uint",pProc, "Uint",0, "Uint",0x8000)
+        DllCall("CloseHandle", "Uint",hProc)
     }
     DetectHiddenWindows, %detectHiddenWindows_old%
-    Return array
+    return array
 }
 
 tray_iconCleanup()
 {
     tray_icons := tray_icons()
-    for index in tray_icons
-    {
-        IfEqual, index, 0, Continue
-        If (tray_icons[index, "sProcess"] = "")
-        tray_iconRemove(tray_icons[index, "hwnd"], tray_icons[index, "uID"], "", tray_icons[index, "hIcon"])
+    for index in tray_icons {
+        IfEqual, index, 0
+            continue
+        if (tray_icons[index, "sProcess"] = "")
+            tray_iconRemove(tray_icons[index, "hwnd"], tray_icons[index, "uID"], "", tray_icons[index, "hIcon"])
     }
 }
 
 tray_iconRemove(hwnd, uID, nMsg = 0, hIcon = 0, nRemove = 0x2)
 {
-    varSetCapacity(nid, size := 936 + 4 * a_ptrSize)
-    numPut(size, nid, 0, "uint")
-    numPut(hwnd, nid, a_ptrSize)
-    numPut(uID, nid, a_ptrSize * 2, "uint")
-    numPut(1|2|4, nid, a_ptrSize * 3, "uint")
-    numPut(nMsg, nid, a_ptrSize * 4, "uint")
-    numPut(hIcon, nid, a_ptrSize * 5, "uint")
-    Return DllCall("shell32\Shell_NotifyIconA", "Uint", nRemove, "Uint", &nid)
+    VarSetCapacity(nid, size := 936 + 4 * A_PtrSize)
+    NumPut(size, nid, 0, "Uint")
+    NumPut(hwnd, nid, A_PtrSize)
+    NumPut(uID, nid, A_PtrSize * 2, "Uint")
+    NumPut(1|2|4, nid, A_PtrSize * 3, "Uint")
+    NumPut(nMsg, nid, A_PtrSize * 4, "Uint")
+    NumPut(hIcon, nid, A_PtrSize * 5, "Uint")
+    return DllCall("shell32\Shell_NotifyIconA", "Uint",nRemove, "Uint",&nid)
 }
 
 tray_getTrayBar()
 {
-    detectHiddenWindows_old := a_detectHiddenWindows
+    detectHiddenWindows_old := A_DetectHiddenWindows
     DetectHiddenWindows, On
-    ControlGet, hParent, hwnd,, TrayNotifyWnd1 , ahk_class Shell_TrayWnd
+    ControlGet, hParent, hwnd,, TrayNotifyWnd1, ahk_class Shell_TrayWnd
     ControlGet, hChild , hwnd,, ToolbarWindow321, ahk_id %hParent%
-    Loop
-    {
-        ControlGet, hwnd, hwnd,, ToolbarWindow32%a_index%, ahk_class Shell_TrayWnd
-        If !hwnd
-            Break
-        Else If (hwnd = hChild)
-        {
-            idxTB := a_index
-            Break
+    Loop {
+        ControlGet, hwnd, hwnd,, ToolbarWindow32%A_Index%, ahk_class Shell_TrayWnd
+        if !hwnd
+            break
+        else if (hwnd = hChild) {
+            idxTB := A_Index
+            break
         }
     }
     DetectHiddenWindows, %detectHiddenWindows_old%
-    Return idxTB
+    return idxTB
 }
 
 TotalCmdWatch:
-if (t_TotalCmdHack and WinActive("ahk_class TNASTYNAGSCREEN"))
-{
+if (t_TotalCmdHack and WinActive("ahk_class TNASTYNAGSCREEN")) {
     WinGetText, tcmd_content, ahk_class TNASTYNAGSCREEN
     StringMid, tcmd_num, tcmd_content, 0, 1
     if (GetKeyState("Alt", "P") == 0) {
@@ -478,8 +478,7 @@ if (t_TotalCmdHack and WinActive("ahk_class TNASTYNAGSCREEN"))
 return
 
 NoExtWarning:
-if (t_NoExtWarning and WinExist(_("sys.rename.title") . " ahk_class #32770"))
-{
+if (t_NoExtWarning and WinExist(_("sys.rename.title") . " ahk_class #32770")) {
     SetControlDelay -1
     ControlClick, Button1, % _("sys.rename.title") . " ahk_class #32770",,,, NA
 }
@@ -575,11 +574,11 @@ SaveImage(pBitmap, filename)
 IsFileName(filename)
 {
     filename := Trim(filename, OmitChars := " `t")
-    if !filename or filename == "CON" or filename == "NUL"
+    if !filename
         return false
-    if InStr(filename, "\") or InStr(filename, "/") or InStr(filename, ":") or InStr(filename, "*")
+    if filename in CON,PRN,AUX,NUL,COM1,COM2,COM3,COM4,COM5,COM6,COM7,COM8,COM9,LPT1,LPT2,LPT3,LPT4,LPT5,LPT6,LPT7,LPT8,LPT9
         return false
-    if InStr(filename, "?") or InStr(filename, "<") or InStr(filename, ">") or InStr(filename, "|")
+    if filename contains <,>,:,`",/,\,|,?,*
         return false
     return true
 }
@@ -592,7 +591,7 @@ IsFileName(filename)
     live_win_id += 0
     if (live_win_id == live_id)
         return
-    if (_live_%live_win_id%_ > 0){
+    if (_live_%live_win_id%_ > 0) {
         LiveDel(live_win_id)
     } else {
         LiveAdd(live_win_id)
@@ -614,8 +613,7 @@ return
 UpdateLive:
 WinGetPos,,, live_w, live_h, ahk_id %live_id%
 live_ypos := 0, live_i := 0
-Loop, %live_count%
-{
+Loop, %live_count% {
     live_i += 1
     loop_id := live_%live_i%_
     loop_id += 0
