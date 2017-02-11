@@ -13,7 +13,7 @@ DetectHiddenWindows, On
 ; ## Settings ##
 
 t_Settings := A_ScriptDir . "\settings.ini"
-if not FileExist(t_Settings)
+if !FileExist(t_Settings)
     NewSetting(t_Settings)
 t_MoveWindow := GetConf(t_Settings, "HotKey", "MoveWindow")
 t_ToggleHidden := GetConf(t_Settings, "HotKey", "ToggleHidden")
@@ -171,7 +171,7 @@ MsgToolTip(msg, timeout:=1000)
 
 TrashInPC(yes:=0)
 {
-    if (not A_IsAdmin) {
+    if (!A_IsAdmin) {
         MsgBox, % _("need.admin", _("gui.settings.trashinpc"))
         return
     }
@@ -309,8 +309,14 @@ ShowMousePos(rel:=0)
 ; ## Mouse ##
 
 #If (t_ScrollVolume and MouseIsOver("ahk_class Shell_TrayWnd"))
-    WheelUp::Send {Volume_Up}
-    WheelDown::Send {Volume_Down}
+    WheelUp::
+    Send {Volume_Up}
+    Sleep, 100
+    return
+    WheelDown::
+    Send {Volume_Down}
+    Sleep, 100
+    return
 #If
 
 MouseIsOver(WinTitle)
@@ -331,7 +337,13 @@ if (t_GnomeStyleStart and x == p_x and y == p_y and menu_stat == 0) {
     WinGetClass, win_class, ahk_id %win_id%
     MouseState := GetKeyState("LButton") + GetKeyState("RButton") + GetKeyState("MButton")
     PosDist := (x1-p_x) ** 2 + (y1-p_y) ** 2 + (x2-p_x) ** 2 + (y2-p_y) ** 2
-    if (win_class != "Shell_TrayWnd" and win_class != "Windows.UI.Core.CoreWindow")
+    win_list1 := "Shell_TrayWnd"
+    win_list2 := "Windows.UI.Core.CoreWindow"
+    win_list3 := "ImmersiveLauncher"
+    win_list4 := "ImmersiveSwitchList"
+    win_list5 := "DV2ControlHost"
+    win_list6 := "Button"
+    if win_class not in %win_list1%,%win_list2%,%win_list3%,%win_list4%,%win_list5%,%win_list6%
         return
     if (MouseState == 0 and PosDist > 72000) {
         menu_stat := 1
@@ -493,7 +505,7 @@ return
 
 PasteToPath(path)
 {
-    if not InStr(FileExist(path), "D")
+    if !InStr(FileExist(path), "D")
         return
     path := RegExReplace(path, "([^\\])$", "$1\")
     if DllCall("IsClipboardFormatAvailable", "Uint",1) or DllCall("IsClipboardFormatAvailable", "Uint",13) {
@@ -511,16 +523,16 @@ PasteToPath(path)
         if ErrorLevel
             break
         filename := Trim(filename, OmitChars := " `t")
-        if not IsFileName(filename) {
+        if !IsFileName(filename) {
             MsgBox, 0x10, % _("invalid.name"), % _("invalid.name.msg")
             default_name := filename
             continue
         }
-        if not InStr(filename, ".")
+        if !InStr(filename, ".")
             filename := filename . (paste_type == _("type.text") ? ".txt" : ".png")
         fullname := path . filename
         default_name := filename
-        if FileExist(fullname) and not (InStr(FileExist(fullname), "R") or InStr(FileExist(fullname), "D")) {
+        if FileExist(fullname) and !(InStr(FileExist(fullname), "R") or InStr(FileExist(fullname), "D")) {
             MsgBox, 0x134, % _("file.exists"), % _("file.exists.msg1", filename)
             IfMsgBox, No
                 continue
@@ -563,7 +575,7 @@ SaveImage(pBitmap, filename)
 IsFileName(filename)
 {
     filename := Trim(filename, OmitChars := " `t")
-    if not filename or filename == "CON" or filename == "NUL"
+    if !filename or filename == "CON" or filename == "NUL"
         return false
     if InStr(filename, "\") or InStr(filename, "/") or InStr(filename, ":") or InStr(filename, "*")
         return false
@@ -607,7 +619,7 @@ Loop, %live_count%
     live_i += 1
     loop_id := live_%live_i%_
     loop_id += 0
-    if (loop_id == live_id or not WinExist("ahk_id " . loop_id)) {
+    if (loop_id == live_id or !WinExist("ahk_id " . loop_id)) {
         live_i -= 1
         LiveDel(loop_id)
         continue
