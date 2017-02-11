@@ -172,7 +172,7 @@ MsgToolTip(msg, timeout:=1000)
 TrashInPC(yes:=0)
 {
     if (!A_IsAdmin) {
-        MsgBox, % _("need.admin", _("gui.settings.trashinpc"))
+        MsgBox, 0x30, % _("need.admin"), % _("need.admin.msg", _("gui.settings.trashinpc"))
         return
     }
     RootKey := "HKEY_LOCAL_MACHINE"
