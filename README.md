@@ -12,6 +12,7 @@ My Windows 10 Tweak AHK Script
 * Disable NumLock key
 * Win-Z: minimize window
 * Arrow: move cursor (dragging), Ctrl-Alt-Arrow: move cursor
+* Win-V: Export and paste steam keys
 * Scroll wheel on taskbar: change system volume
 * Cursor hit Start: toggle Start menu (Single Monitor)
 * Auto cleanup dead tray icons

@@ -21,6 +21,7 @@ t_CapsLock2Ctrl := GetConf(t_Settings, "HotKey", "CapsLock2Ctrl")
 t_DisableNumLock := GetConf(t_Settings, "HotKey", "DisableNumLock")
 t_Minimize := GetConf(t_Settings, "HotKey", "Minimize")
 t_ArrowKeyMouse := GetConf(t_Settings, "HotKey", "ArrowKeyMouse")
+t_PasteAsKey := GetConf(t_Settings, "HotKey", "PasteAsKey")
 t_ScrollVolume := GetConf(t_Settings, "Mouse", "ScrollVolume")
 t_GnomeStyleStart := GetConf(t_Settings, "Monitor", "GnomeStyleStart")
 t_CleanTrayIcon := GetConf(t_Settings, "Monitor", "CleanTrayIcon")
@@ -80,6 +81,7 @@ NewSetting(file)
     DisableNumLock=1
     Minimize=1
     ArrowKeyMouse=1
+    PasteAsKey=1
     [Mouse]
     ScrollVolume=1
     [Monitor]
@@ -115,17 +117,18 @@ Gui, Settings:Add, CheckBox, Checked%t_CapsLock2Ctrl% v_c3 x12 y99 w350 h20, % _
 Gui, Settings:Add, CheckBox, Checked%t_DisableNumLock% v_c4 x12 y119 w350 h20, % _("gui.settings.disablenumlock")
 Gui, Settings:Add, CheckBox, Checked%t_Minimize% v_c5 x12 y139 w350 h20, % _("gui.settings.minimize")
 Gui, Settings:Add, CheckBox, Checked%t_ArrowKeyMouse% v_c6 x12 y159 w350 h20, % _("gui.settings.arrowkeymouse")
-Gui, Settings:Add, CheckBox, Checked%t_ScrollVolume% v_c7 x12 y179 w350 h20, % _("gui.settings.scrollvolume")
-Gui, Settings:Add, CheckBox, Checked%t_GnomeStyleStart% v_c8 x12 y199 w350 h20, % _("gui.settings.gnomestylestart")
-Gui, Settings:Add, CheckBox, Checked%t_CleanTrayIcon% v_c9 x12 y219 w350 h20, % _("gui.settings.cleantrayicon")
-Gui, Settings:Add, CheckBox, Checked%t_NoExtWarning% v_c10 x12 y239 w350 h20, % _("gui.settings.noextwarning")
-Gui, Settings:Add, CheckBox, Checked%t_SaveAsEnable% v_c11 x12 y259 w350 h20, % _("gui.settings.saveasfile")
-Gui, Settings:Add, CheckBox, Checked%t_LiveEnable% v_c12 x12 y279 w350 h20, % _("gui.settings.livewindow")
-Gui, Settings:Add, CheckBox, Checked%t_TrashInPC% v_c13 x12 y299 w350 h20, % _("gui.settings.trashinpc")
-Gui, Settings:Add, Text, x12 y332 w350 h20, % _("gui.settings.warning")
-Gui, Settings:Add, Button, gBtnSave Default x12 y363 w170 h30, % _("gui.settings.save")
-Gui, Settings:Add, Button, gBtnCancel x192 y363 w170 h30, % _("gui.settings.cancel")
-Gui, Settings:Show, h405 w375, % _("gui.settings")
+Gui, Settings:Add, CheckBox, Checked%t_PasteAsKey% v_c7 x12 y179 w350 h20, % _("gui.settings.pasteaskey")
+Gui, Settings:Add, CheckBox, Checked%t_ScrollVolume% v_c8 x12 y199 w350 h20, % _("gui.settings.scrollvolume")
+Gui, Settings:Add, CheckBox, Checked%t_GnomeStyleStart% v_c9 x12 y219 w350 h20, % _("gui.settings.gnomestylestart")
+Gui, Settings:Add, CheckBox, Checked%t_CleanTrayIcon% v_c10 x12 y239 w350 h20, % _("gui.settings.cleantrayicon")
+Gui, Settings:Add, CheckBox, Checked%t_NoExtWarning% v_c11 x12 y259 w350 h20, % _("gui.settings.noextwarning")
+Gui, Settings:Add, CheckBox, Checked%t_SaveAsEnable% v_c12 x12 y279 w350 h20, % _("gui.settings.saveasfile")
+Gui, Settings:Add, CheckBox, Checked%t_LiveEnable% v_c13 x12 y299 w350 h20, % _("gui.settings.livewindow")
+Gui, Settings:Add, CheckBox, Checked%t_TrashInPC% v_c14 x12 y319 w350 h20, % _("gui.settings.trashinpc")
+Gui, Settings:Add, Text, x12 y352 w350 h20, % _("gui.settings.warning")
+Gui, Settings:Add, Button, gBtnSave Default x12 y383 w170 h30, % _("gui.settings.save")
+Gui, Settings:Add, Button, gBtnCancel x192 y383 w170 h30, % _("gui.settings.cancel")
+Gui, Settings:Show, h425 w375, % _("gui.settings")
 return
 
 Menu_Reload:
@@ -149,13 +152,14 @@ SetConf(t_Settings, "HotKey", "CapsLock2Ctrl", _c3)
 SetConf(t_Settings, "HotKey", "DisableNumLock", _c4)
 SetConf(t_Settings, "HotKey", "Minimize", _c5)
 SetConf(t_Settings, "HotKey", "ArrowKeyMouse", _c6)
-SetConf(t_Settings, "Mouse", "ScrollVolume", _c7)
-SetConf(t_Settings, "Monitor", "GnomeStyleStart", _c8)
-SetConf(t_Settings, "Monitor", "CleanTrayIcon", _c9)
-SetConf(t_Settings, "Monitor", "NoExtWarning", _c10)
-SetConf(t_Settings, "SaveAsFile", "Enable", _c11)
-SetConf(t_Settings, "LiveWindow", "Enable", _c12)
-SetConf(t_Settings, "Windows", "TrashInPC", _c13)
+SetConf(t_Settings, "HotKey", "PasteAsKey", _c7)
+SetConf(t_Settings, "Mouse", "ScrollVolume", _c8)
+SetConf(t_Settings, "Monitor", "GnomeStyleStart", _c9)
+SetConf(t_Settings, "Monitor", "CleanTrayIcon", _c10)
+SetConf(t_Settings, "Monitor", "NoExtWarning", _c11)
+SetConf(t_Settings, "SaveAsFile", "Enable", _c12)
+SetConf(t_Settings, "LiveWindow", "Enable", _c13)
+SetConf(t_Settings, "Windows", "TrashInPC", _c14)
 Reload
 return
 
@@ -305,10 +309,46 @@ ShowMousePos(rel:=0)
     pos_color_r += 0, pos_color_g += 0, pos_color_b += 0
     pos_color_str := _("mouse.pos.hex", pos_color_hex) . "`n" . _("mouse.pos.rgb", pos_color_r, pos_color_g, pos_color_b)
     if (rel) {
-        ToolTip, % _("mouse.pos.abs", abs_pos_x, abs_pos_y) . "`n" . _("mouse.pos.rel", rel_pos_x, rel_pos_y) . "`n" . pos_color_str
+        MsgToolTip(_("mouse.pos.abs", abs_pos_x, abs_pos_y) . "`n" . _("mouse.pos.rel", rel_pos_x, rel_pos_y) . "`n" . pos_color_str, 5000)
     } else {
         MsgToolTip(_("mouse.pos.abs", abs_pos_x, abs_pos_y) . "`n" . pos_color_str, 3000)
     }
+}
+
+#If (t_PasteAsKey)
+    #v::
+    if DllCall("IsClipboardFormatAvailable", "Uint",1) or DllCall("IsClipboardFormatAvailable", "Uint",13) {
+        clip_old := ClipboardAll
+        clip_keyraw := Clipboard
+        key_re:="imO)[0-9A-Z]{5}(?:-[0-9A-Z]{5}){2,4}"
+        keys := ""
+        for i, m in RxMatches(clip_keyraw, key_re) {
+            keys := keys . m.Value . ","
+        }
+        if (keys != "") {
+            keys := SubStr(keys, 1, StrLen(keys) - 1)
+            keys := "!redeem " . keys
+            Clipboard := keys
+            Send, ^v
+        }
+        Clipboard := clip_old
+        clip_old := ""
+        clip_keyraw := ""
+        keys := ""
+    }
+    return
+#If
+
+RxMatches(Haystack, Needle) {
+    Result := []
+    start = 1
+    Loop {
+        if (!RegexMatch(haystack, needle, M, start)) 
+            break
+        Result.Insert(M)
+        start := M.Pos + M.Len
+    }
+    return Result
 }
 
 ; ## Mouse ##
@@ -489,16 +529,21 @@ return
 #If t_SaveAsEnable and WinActive("ahk_class CabinetWClass")
     ~^v::
     save_hWnd := WinExist("A")
-    for window in ComObjCreate("Shell.Application").Windows {
-        if window.HWND == save_hWnd {
-            PasteToPath(window.Document.Folder.Self.Path)
+    ControlGetFocus, save_focus, ahk_id %save_hWnd%
+    if save_focus not in Edit1,Edit2,DirectUIHWND1
+        for window in ComObjCreate("Shell.Application").Windows {
+            if window.HWND == save_hWnd {
+                PasteToPath(window.Document.Folder.Self.Path)
+            }
         }
-    }
     return
 #If
 #If t_SaveAsEnable and WinActive("ahk_class WorkerW")
     ~^v::
-    PasteToPath(A_Desktop)
+    save_hWnd := WinExist("A")
+    ControlGetFocus, save_focus, ahk_id %save_hWnd%
+    if save_focus not in Edit1,Edit2,DirectUIHWND1
+        PasteToPath(A_Desktop)
     return
 #If
 
@@ -617,7 +662,8 @@ Loop, %live_count% {
     live_i += 1
     loop_id := live_%live_i%_
     loop_id += 0
-    if (loop_id == live_id or !WinExist("ahk_id " . loop_id)) {
+    WinGetClass, loop_class, ahk_id %loop_id%
+    if (loop_id == live_id or loop_class == "Windows.UI.Core.CoreWindow" or !WinExist("ahk_id " . loop_id)) {
         live_i -= 1
         LiveDel(loop_id)
         continue

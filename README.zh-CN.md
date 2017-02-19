@@ -4,6 +4,10 @@ Windows 10 Tweak AHK 脚本
 
 **如有意见或建议请反馈。**
 
+**在 Settings 中将 Language 改为 zh_CN 就是中文界面。**
+**在 Settings 中将 Language 改为 zh_CN 就是中文界面。**
+**在 Settings 中将 Language 改为 zh_CN 就是中文界面。**
+
 ## 特性
 
 * Win-M: 移动窗口
@@ -12,6 +16,7 @@ Windows 10 Tweak AHK 脚本
 * 禁用 NumLock 键
 * Win-Z: 最小化窗口
 * 拖动时，方向键控制指针; 否则 Ctrl-Alt-方向键 控制
+* Win-V: 导出并粘贴 Steam Key
 * 在任务栏上滚动滚轮: 调节系统音量
 * 鼠标指针撞击开始按钮: 切换开始菜单（单显示器）
 * 自动清除死进程的托盘图标
