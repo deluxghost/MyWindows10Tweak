@@ -4,9 +4,9 @@ Windows 10 Tweak AHK 脚本
 
 **如有意见或建议请反馈。**
 
-**在 Settings 中将 Language 改为 zh_CN 就是中文界面。**
-**在 Settings 中将 Language 改为 zh_CN 就是中文界面。**
-**在 Settings 中将 Language 改为 zh_CN 就是中文界面。**
+**在 Settings 中将 Language 改为 zh_CN 就是中文界面。**  
+**在 Settings 中将 Language 改为 zh_CN 就是中文界面。**  
+**在 Settings 中将 Language 改为 zh_CN 就是中文界面。**  
 
 ## 特性
 
